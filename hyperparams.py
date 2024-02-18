@@ -10,7 +10,7 @@ def get_default_hyperparams():
     H = Hyperparams()
     H.grad_clip = 200.0
     H.skip_threshold = 400.0
-    H.width = 384
+    H.width = 512
     H.lr = 0.0002
     H.zdim = 16
     H.wd = 0.01

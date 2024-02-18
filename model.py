@@ -5,6 +5,7 @@ from torch.nn import functional as F
 from discretized_mix_logistic import discretized_mix_logistic_loss, sample_from_discretized_mix_logistic
 from helpers import draw_gaussian_diag_samples, gaussian_analytical_kl, get_conv, get_3x3, get_1x1, pad_channels, get_width_settings, parse_layer_string
 
+
 class HModule(nn.Module):
     def __init__(self, H):
         super().__init__()
@@ -162,7 +163,8 @@ class Decoder(HModule):
 
     def forward(self, y, activations, k=None, get_latents=False):
         stats = []
-        xs = {1: self.label_embedding(y).reshape(-1, self.H.width, 1, 1)}
+        #xs = {1: self.label_embedding(y).reshape(-1, self.H.width, 1, 1)}
+        xs = {1: y.reshape(-1, self.H.width, 1, 1)}
         for i, block in enumerate(self.dec_blocks):
             sample_prior = False if k is None else i >= k
             xs, block_stats = block(xs, activations, sample_prior, get_latents=get_latents)
@@ -178,7 +180,7 @@ class VAE(HModule):
     def forward(self, x, y):
         activations = self.encoder.forward(x)
         px_z, stats = self.decoder.forward(y, activations)
-        rate_per_pixel = torch.zeros(y.shape)
+        rate_per_pixel = torch.zeros(y.shape[0])
         ndims = np.prod(x.shape[1:])
         for statdict in stats:
             if statdict["kl"] is None: continue
