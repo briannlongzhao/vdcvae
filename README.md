@@ -27,3 +27,5 @@ python3 sample.py
 ```
 
 This will sample 10 images of each of the 10 classes represented in the CIFAR-10 dataset of 32x32 images. Enjoy!
+
+Modification by Brian: Added training and sample with CLIP, which enables text input (still limited to the training set).
